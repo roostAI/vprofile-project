@@ -17,7 +17,6 @@ public void testUserDetailsHappyFlow() throws Exception {
     Assert.assertEquals(EXPECTED_ROLENAME, role.getName());
     Assert.assertEquals(EXPECTED_SIZE, role.getUsers().size());
 }
-""""
 Scenario 1: Retrieve the Name of the Role Successfully
 
 Details:
@@ -31,9 +30,7 @@ Execution:
 
 Validation:
   The assertion aims to verify that the `getName` method correctly retrieves the role's name, confirming the method's functionality. This test is significant for ensuring that role names are properly managed and accessed in the application.
-"""
 
-"""
 Scenario 2: Retrieve Name When Not Set
 
 Details:
@@ -47,9 +44,7 @@ Execution:
 
 Validation:
   This assertion ensures that the `getName` method returns null for a role with no name set, confirming the method's handling of default and unset values. It is crucial for understanding the method's behavior in uninitialized states.
-"""
 
-"""
 Scenario 3: Change Name and Ensure getName Reflects Update
 
 Details:
@@ -63,9 +58,7 @@ Execution:
 
 Validation:
   This assertion checks that after updating the role name, `getName` reflects this change, ensuring the method's accuracy in dynamic scenarios. It highlights the importance of maintaining data consistency and correctness in the application.
-"""
 
-"""
 Scenario 4: Handle Edge Case of Empty Name
 
 Details:
@@ -79,9 +72,7 @@ Execution:
 
 Validation:
   This assertion validates that the `getName` method correctly processes and returns empty strings, important for ensuring the application gracefully handles edge case inputs without unexpected behavior.
-"""
 
-"""
 Scenario 5: Concurrent Access to getName
 
 Details:
@@ -95,7 +86,8 @@ Execution:
 
 Validation:
   This test ensures that concurrent access to `getName` does not result in data inconsistency or application errors, crucial for applications running in multi-threaded environments to maintain data integrity.
-"""
+
+roost_feedback [12/12/2024, 2:06:17 PM]:improve the logic in the tests
 */
 
 // ********RoostGPT********
@@ -106,9 +98,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Tag;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import org.junit.jupiter.api.*;
 import javax.persistence.*;
-import java.util.Set;
 
 public class RoleGetNameTest {
 
