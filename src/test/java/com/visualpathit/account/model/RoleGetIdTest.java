@@ -91,6 +91,8 @@ Execution:
 Validation:
   Verifies that the getId method consistently returns the most recently set ID, even after rapid updates, ensuring sequential updates are managed correctly.
 ```
+
+roost_feedback [12/12/2024, 2:17:13 PM]:improve logic of tests
 */
 
 // ********RoostGPT********
@@ -102,7 +104,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
 import javax.persistence.*;
-import java.util.Set;
 
 public class RoleGetIdTest {
 
@@ -111,12 +112,12 @@ public class RoleGetIdTest {
 	public void retrieveIdAfterSettingValidId() {
 		// Arrange
 		Role role = new Role();
-		Long expectedId = 101L; // TODO: Change this value as needed
+		Long expectedId = 101L;
 		role.setId(expectedId);
 		// Act
 		Long actualId = role.getId();
 		// Assert
-		assertEquals((Long) expectedId, (Long) actualId, "The ID set should match the ID retrieved");
+		assertEquals(expectedId, actualId, "The ID set should match the ID retrieved");
 	}
 
 	@Test
@@ -152,7 +153,7 @@ public class RoleGetIdTest {
 		// Act
 		Long actualId = role.getId();
 		// Assert
-		assertEquals((Long) expectedId, (Long) actualId, "The ID should be Long.MAX_VALUE after being set to it");
+		assertEquals(expectedId, actualId, "The ID should be Long.MAX_VALUE after being set to it");
 	}
 
 	@Test
@@ -160,14 +161,14 @@ public class RoleGetIdTest {
 	public void retrieveIdAfterQuickConsecutiveUpdates() {
 		// Arrange
 		Role role = new Role();
-		role.setId(101L); // TODO: Change this value as needed
-		role.setId(102L); // TODO: Change this value as needed
-		Long expectedId = 103L; // TODO: Change this value as needed
+		role.setId(101L);
+		role.setId(102L);
+		Long expectedId = 103L;
 		role.setId(expectedId);
 		// Act
 		Long actualId = role.getId();
 		// Assert
-		assertEquals((Long) expectedId, (Long) actualId, "The ID should match the last value set in quick succession");
+		assertEquals(expectedId, actualId, "The ID should match the last value set in quick succession");
 	}
 
 }
