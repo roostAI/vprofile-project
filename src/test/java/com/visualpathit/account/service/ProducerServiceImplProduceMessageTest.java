@@ -1,5 +1,3 @@
-//This test file is marked invalid as it contains compilation errors. Change the extension to of this file to .java, to manually edit its contents
-
 
 // ********RoostGPT********
 /*
@@ -104,10 +102,15 @@ Execution:
 Validation:
   This test ensures that the produceMessage method can handle large messages, which is important for understanding the system's capacity and performance under different load conditions.
 
+
+roost_feedback [27/01/2026, 8:25:26 AM]:Standard\sMockito\scannot\sintercept\sthat\snew\sConnectionFactory()\scall.\sIt\shas\sno\scontrol\sover\sit.\sIf\sused\sstandard\sMockito,\sunit\stest\swould\stry\sto\sconnect\sto\sa\sreal\sRabbitMQ\sserver\sat\slocalhost,\scausing\sit\sto\sfail\sif\sthe\sserver\swasn\'t\srunning\s(or\spass\sfor\sthe\swrong\sreasons\sif\sit\swas).Use\sPowerMock\sto\s\magically\\sintercept\sthe\snew\scall\swithout\schanging\sa\ssingle\sline\sof\syour\ssource\scode.
 */
 
 // ********RoostGPT********
-package com.visualpathit.account.service;import com.rabbitmq.client.Connection;
+
+package com.visualpathit.account.service;
+
+import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.visualpathit.account.utils.RabbitMqUtil;
 import org.springframework.stereotype.Service;
@@ -123,7 +126,13 @@ import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 import org.junit.jupiter.api.*;
 import com.rabbitmq.client.AMQP;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import org.junit.runner.RunWith;
 
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(ConnectionFactory.class)
 class ProducerServiceImplProduceMessageTest {
     private ProducerServiceImpl producerService;
     @Mock
@@ -132,10 +141,13 @@ class ProducerServiceImplProduceMessageTest {
     private Connection mockConnection;
     @Mock
     private Channel mockChannel;
+
     @BeforeEach
     void setUp() throws IOException, TimeoutException {
         MockitoAnnotations.initMocks(this);
         producerService = new ProducerServiceImpl();
+        PowerMockito.mockStatic(ConnectionFactory.class);
+        PowerMockito.whenNew(ConnectionFactory.class).withNoArguments().thenReturn(mockConnectionFactory);
         when(mockConnectionFactory.newConnection()).thenReturn(mockConnection);
         when(mockConnection.createChannel()).thenReturn(mockChannel);
         when(mockConnection.isOpen()).thenReturn(true);
@@ -145,6 +157,7 @@ class ProducerServiceImplProduceMessageTest {
         RabbitMqUtil.setRabbitMqUser("guest");
         RabbitMqUtil.setRabbitMqPassword("guest");
     }
+
     @Test
     @Tag("valid")
     void successfulMessageProduction() throws IOException, TimeoutException {
@@ -157,6 +170,7 @@ class ProducerServiceImplProduceMessageTest {
         verify(mockChannel).close();
         verify(mockConnection).close();
     }
+
     @Test
     @Tag("invalid")
     void handleIOException() throws IOException, TimeoutException {
@@ -164,6 +178,7 @@ class ProducerServiceImplProduceMessageTest {
         String result = producerService.produceMessage("Test message");
         assertEquals("response", result);
     }
+
     @Test
     @Tag("invalid")
     void handleTimeoutException() throws IOException, TimeoutException {
@@ -171,6 +186,7 @@ class ProducerServiceImplProduceMessageTest {
         String result = producerService.produceMessage("Test message");
         assertEquals("response", result);
     }
+
     @Test
     @Tag("boundary")
     void emptyMessageHandling() throws IOException, TimeoutException {
@@ -178,6 +194,7 @@ class ProducerServiceImplProduceMessageTest {
         assertEquals("response", result);
         verify(mockChannel).basicPublish(eq("messages"), eq(""), any(AMQP.BasicProperties.class), eq("".getBytes()));
     }
+
     @Test
     @Tag("boundary")
     void largeMessageHandling() throws IOException, TimeoutException {
